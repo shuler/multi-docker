@@ -1,0 +1,21 @@
+language: generic
+sudo: required
+services:
+  - docker
+
+before_install:
+  - docker build -t shuler/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true shuler/react-test npm run test
+
+after_success:
+  - docker build -t shuler/multi-client ./client
+  - docker build -t shuler/multi-nginx ./nginx
+  - docker build -t shuler/multi-server ./server
+  - docker build -t shuler/multi-worker ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  - docker push shuler/multi-client
+  - docker push shuler/multi-nginx
+  - docker push shuler/multi-server
+  - docker push shuler/multi-worker
