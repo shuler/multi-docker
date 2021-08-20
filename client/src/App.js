@@ -8,6 +8,9 @@ import Fib from './Fib';
 function App() {
   return (
     <Router>
+      <header>
+        <h1>Fid Calculator</h1>
+      </header>
       <div className="App">
         <div>
           <Route exact path="/" component={Fib} />
